@@ -14,12 +14,32 @@ class Board:
         self.board_size = board_size
         self.block_size = block_size
         self.board = [[0] * self.board_size for j in range(self.board_size)]
+        self.other_board = [
+            [0] * self.board_size for j in range(self.board_size)]
         self.pieces = pieces
         self.name = name
         self.screen = screen
         self.copy = copy
 
+        self.ships = 0
+
         self.font = pygame.font.Font(None, 30)
+        self.status = 0
+
+    def is_valid_move(self, move):
+        return self.board[move[0]][move[1]]  in [0,4]
+
+    def move(self, pos):
+        if self.board[pos[0]][pos[1]] == 0:
+            self.board[pos[0]][pos[1]]  = 3
+        elif self.board[pos[0]][pos[1]] == 4:
+            self.ships -= 1
+            self.board[pos[0]][pos[1]]  = 2
+
+        return self.board[pos[0]][pos[1]]
+
+    def is_game_over(self):
+        return self.ships == 0
 
     def randomize(self):
         # Randomize the board
@@ -47,6 +67,8 @@ class Board:
                 sx = px + (k if direction else 0)
                 sy = py + (0 if direction else k)
                 self.board[sx][sy] = 4
+        self.ships = sum(self.pieces)
+        print(self.ships)
 
     def get_copy(self):
         copy = type(self)(self.board_size, self.block_size,
@@ -99,15 +121,15 @@ class Board:
                 if(self.copy):
                     # For copy, display the ship positions
                     if self.board[row][col] == 0:
-                        color = (200, 200, 200)
-                    elif self.board[row][col] == 4:
                         color = (100, 100, 240)
+                    elif self.board[row][col] == 4:
+                        color = (200, 200, 200)
                 else:
                     # For original, if there is nothing there, render nothing
                     if self.board[row][col] == 2:
                         color = (240, 100, 100)
                     elif self.board[row][col] == 3:
-                        color = (50, 50, 50)
+                        color = (100, 100, 240)
 
                 if color:
                     # Render a small block of the color
@@ -120,6 +142,10 @@ class Board:
 
         # Write board name just below
         text = self.font.render(self.name, 1, (255, 255, 255))
+        if self.status == 1:
+            text = self.font.render("Won the game", 1, (100, 200, 100))
+        elif self.status == 2:
+            text = self.font.render("Lost the game", 1, (200, 100, 100))
         textpos = text.get_rect(centerx=(self.board_size * self.block_size) / 2 + position[
                                 1] * self.block_size, y=((position[0] + 0.5) * self.block_size + self.block_size * self.board_size))
         self.screen.blit(text, textpos)
