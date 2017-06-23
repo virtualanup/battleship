@@ -27,14 +27,14 @@ class Board:
         self.status = 0
 
     def is_valid_move(self, move):
-        return self.board[move[0]][move[1]]  in [0,4]
+        return self.board[move[0]][move[1]] in [0, 4]
 
     def move(self, pos):
         if self.board[pos[0]][pos[1]] == 0:
-            self.board[pos[0]][pos[1]]  = 3
+            self.board[pos[0]][pos[1]] = 3
         elif self.board[pos[0]][pos[1]] == 4:
             self.ships -= 1
-            self.board[pos[0]][pos[1]]  = 2
+            self.board[pos[0]][pos[1]] = 2
 
         return self.board[pos[0]][pos[1]]
 
@@ -141,11 +141,13 @@ class Board:
                     pass
 
         # Write board name just below
-        text = self.font.render(self.name, 1, (255, 255, 255))
+        text = self.font.render(self.name + "'s Area", 1, (255, 255, 255))
         if self.status == 1:
-            text = self.font.render("Won the game", 1, (100, 200, 100))
+            text = self.font.render(
+                self.name + " Won the game", 1, (100, 200, 100))
         elif self.status == 2:
-            text = self.font.render("Lost the game", 1, (200, 100, 100))
+            text = self.font.render(
+                self.name + " Lost the game", 1, (200, 100, 100))
         textpos = text.get_rect(centerx=(self.board_size * self.block_size) / 2 + position[
                                 1] * self.block_size, y=((position[0] + 0.5) * self.block_size + self.block_size * self.board_size))
         self.screen.blit(text, textpos)

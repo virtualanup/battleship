@@ -30,9 +30,9 @@ class Game:
 
         # Initialize the boards
         self.b1 = self.board(self.board_size, self.block_size,
-                             self.screen, self.p1.name + "'s Board")
+                             self.screen, self.p1.name)
         self.b2 = self.board(self.board_size, self.block_size,
-                             self.screen, self.p2.name + "'s Board")
+                             self.screen, self.p2.name)
 
         self.b1.randomize()
         self.b2.randomize()
@@ -64,11 +64,13 @@ class Game:
                     exit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == K_f:
-                        self.speed = min(8000, self.speed*2)
+                        self.speed = min(8000, self.speed * 2)
+                        print("Speed = ", speed)
                     elif event.key == K_s:
-                        self.speed = max(1, self.speed/2)
+                        self.speed = max(1, self.speed / 2)
+                        print("Speed = ", speed)
                     elif event.key == K_p:
-                        pause= not pause
+                        pause = not pause
                     elif event.key == K_q:
                         pygame.quit()
                         exit()
@@ -97,7 +99,7 @@ class Game:
             self.b2c.render((self.board_size + 4, self.board_size + 4))
             pygame.display.update()
             i += 1
-            print(i)
+            # print(i)
 
     def render(self):
         # Render the game
